@@ -1,0 +1,123 @@
+<body>
+	
+	<script>
+
+		let locked = false;
+
+		document.addEventListener("keydown", async event => {
+				
+
+			console.log(event.key, locked)
+
+			if(event.ctrlKey && !locked){
+			
+				console.log("locked")
+				await document.body.requestPointerLock();
+				return
+			}
+			
+
+			let modifier = [];
+
+			if(event.ctrlKey){
+				modifier.push("ctrl");
+			}
+
+			if(event.altKey){
+				modifier.push("alt");
+			}
+
+			if(event.shiftKey){
+				modifier.push("shift");
+			}
+
+
+			fetch("/keyboard", {
+
+				headers : {
+					"Content-Type" : "application/json",
+				},
+				method : "POST", 
+				body : JSON.stringify({
+
+					key : event.key.toLowerCase(),
+					modifier : modifier.join("+")
+
+				})
+			})	
+		})
+
+
+		let left_click = false;
+		let right_click = false;
+
+		document.addEventListener("mousemove", e => {
+
+			//return
+
+			console.log(left_click, right_click)
+
+			fetch("/mouse", {
+
+				headers : {
+					"Content-Type" : "application/json",
+				},
+				method : "POST", 
+				body : JSON.stringify({
+
+					movement : {
+						dx : e.movementX,
+						dy : e.movementY
+					},
+					buttons : {
+						left_click,
+						right_click
+					},
+					scroll : 00
+				})
+			})
+		})
+
+		document.addEventListener("mousedown", e => {
+
+			
+			if(e.which == 1){
+
+				left_click = true;
+			} 
+			if(e.which == 3){
+
+				right_click = true;
+			} 
+		})
+		
+		document.addEventListener("mouseup", e => {
+			
+			if(e.which == 1){
+
+				left_click = false;
+			} 
+			if(e.which == 3){
+
+				right_click = false;
+			} 
+		})
+
+		document.addEventListener("click", e => {
+			fetch("/click", {
+
+				headers : {
+					"Content-Type" : "application/json",
+				},
+				method : "POST", 
+				body : JSON.stringify({
+					click : true
+				})
+			})
+		})
+
+
+	</script>
+
+
+</body>
