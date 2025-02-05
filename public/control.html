@@ -1,0 +1,132 @@
+<body>
+	
+	<script>
+
+		const ws = new WebSocket("http://192.168.1.101:3000")
+
+
+
+		let locked = false;
+
+		document.addEventListener("keydown", async event => {
+				
+
+			console.log(event.key, locked)
+
+			if(event.ctrlKey && !locked){
+			
+				console.log("locked")
+				await document.body.requestPointerLock();
+				return
+			}
+			
+
+			let modifier = [];
+
+			if(event.ctrlKey){
+				modifier.push("ctrl");
+			}
+
+			if(event.altKey){
+				modifier.push("alt");
+			}
+
+			if(event.shiftKey){
+				modifier.push("shift");
+			}
+
+
+			ws.send(JSON.stringify({
+				type : "keyboard",
+				key : event.key.toLowerCase(),
+				modifier : modifier.join("+")
+			}))
+
+		})
+
+
+		let left_click = false;
+		let right_click = false;
+
+		document.addEventListener("mousemove", e => {
+
+			//return
+
+			console.log(left_click, right_click)
+
+			ws.send(JSON.stringify({
+
+				type : "mouse",
+				movement : {
+					dx : e.movementX,
+					dy : e.movementY
+				},
+				buttons : {
+					left_click,
+					right_click
+				},
+				scroll : 00
+			}))
+
+		})
+
+		document.addEventListener("mousedown", e => {
+
+			
+			if(e.which == 1){
+
+				left_click = true;
+			} 
+			if(e.which == 3){
+
+				right_click = true;
+			} 
+		})
+		
+		document.addEventListener("mouseup", e => {
+			
+			if(e.which == 1){
+
+				left_click = false;
+			} 
+			if(e.which == 3){
+
+				right_click = false;
+			} 
+		})
+
+		document.addEventListener("click", e => {
+			ws.send(JSON.stringify({
+				type : "mouse",
+				buttons : {
+					left_click : e.which == 1,
+					right_click : e.which == 3
+				},
+				scroll : 0,
+				movement : {
+					dx : 0,
+					dy : 0
+				}
+
+			}))
+		})
+
+
+	</script>
+
+
+</body>
+
+<style>
+
+body{
+	margin : 0px;
+}
+img{
+	width:100%;
+	height:100%;
+}
+
+</style>
+
+<img src="http://localhost:8080/?action=stream" alt="" width="800" height="600">
