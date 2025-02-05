@@ -77,7 +77,7 @@ app.post("/keyboard", (req, res) => {
 
 	let r = (`xdotool key ${modifier}${key}`);
 
-	console.log(r)
+	//console.log(r)
 
 	exec(r)
 
@@ -104,11 +104,31 @@ app.post("/mouse", (req, res) => {
 	res.send("")
 })
 
+app.post("/scroll", (req, res) => {
+	let { amount } = req.body;
+
+	//console.log("hello from scroll " + amount)
+
+	amount = -amount/2
+
+	if(amount > 0){
+		exec(`xdotool click --repeat ${Math.abs(amount)} --delay 50 5`)
+	}
+
+
+	if(amount < 0){
+		exec(`xdotool click --repeat ${Math.abs(amount)} --delay 50 4`)
+	}
+
+	
+	res.send("")
+})
+
 app.post("/click", (req, res) => {
 
 	let { left_click, right_click } = req.body;
 
-	console.log(req.body);
+	//console.log(req.body);
 
 	if(left_click){
 		exec(`xdotool click 1`)	
