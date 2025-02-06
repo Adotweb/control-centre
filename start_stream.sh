@@ -33,7 +33,7 @@ echo "discord tab is open trying to join server"
 echo "(waiting for discord to load)"
 sleep 10
 
-xdotool key "F12"
+xdotool key "ctrl+shift+j"
 
 sleep 1
 
