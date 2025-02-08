@@ -93,10 +93,25 @@ echo "######" > server.log
 
 
 node index.js > server.log 2>&1 & 
+SERVER_PID=$!
 
 echo "input server is running"
 echo "opening input server"
 
 cloudflared tunnel run tunnel1 &
+TUNNEL_PID=$!
+
+cleanup(){
+	echo "stopping server and tunnel"
+
+	kill $SERVER_PID 
+	kill $TUNNEL_PID
+
+}
 
 echo "input server is now online"
+
+trap cleanup EXIT INT TERM
+
+
+wait
