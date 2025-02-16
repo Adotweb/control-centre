@@ -2,7 +2,7 @@
 	
 	<script>
 
-		const ws = new WebSocket("http://192.168.1.101:3000")
+		const ws = new WebSocket("http://192.168.1.106:3000")
 
 
 
@@ -94,6 +94,22 @@
 				right_click = false;
 			} 
 		})
+		
+		document.addEventListener("wheel", e => {
+			ws.send(JSON.stringify({
+				type : "mouse",
+				buttons : {
+					left_click : e.which == 1,
+					right_click : e.which == 3
+				},
+				scroll : e.deltaY,
+				movement : {
+					dx : 0,
+					dy : 0
+				}
+
+			}))
+		})
 
 		document.addEventListener("click", e => {
 			ws.send(JSON.stringify({
@@ -125,6 +141,7 @@ body{
 img{
 	width:100%;
 	height:100%;
+	overflow:auto;
 }
 
 </style>
