@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Project Apollo/Hermes",
+  "version": "1.0",
+  "description": "Discord Relay script",
+  "content_scripts": [
+    {
+      "matches": ["*://discord.com/*"], 
+      "js": ["main.js"]
+    }
+  ],
+  "permissions": []
+}
