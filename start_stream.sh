@@ -35,7 +35,7 @@ sleep 10
 
 xdotool key "ctrl+shift+j"
 
-sleep 1
+sleep 2
 
 
 xdotool type "[...document.querySelectorAll('*')].filter(s => s.innerHTML == 'g')[0].click()"
@@ -78,7 +78,7 @@ sleep 1
 
 echo "last clicks"
 
-xdotool mousemove 1235 600
+xdotool mousemove 1235 590
 xdotool click 1
 sleep 1
 
