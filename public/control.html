@@ -2,20 +2,24 @@
 	
 	<script>
 
-		const ws = new WebSocket("http://192.168.1.106:3000")
+		const ws = new WebSocket("http://192.168.1.101:3000")
 
 
 
 		let locked = false;
 
 		document.addEventListener("keydown", async event => {
-				
+			
+			if(event.ctrlKey && event.key == "v"){
+				event.preventDefault()
 
-			console.log(event.key, locked)
+				let clipboard_content = await navigator.clipboard.readText();
+				console.log(clipboard_content)
+			}
+
 
 			if(event.ctrlKey && !locked){
 			
-				console.log("locked")
 				await document.body.requestPointerLock();
 				return
 			}
@@ -23,8 +27,12 @@
 
 			let modifier = [];
 
+
 			if(event.ctrlKey){
-				modifier.push("ctrl");
+
+					
+
+				modifier.push("ctrl");				
 			}
 
 			if(event.altKey){
@@ -52,7 +60,6 @@
 
 			//return
 
-			console.log(left_click, right_click)
 
 			ws.send(JSON.stringify({
 
@@ -120,7 +127,7 @@
 				},
 				scroll : 0,
 				movement : {
-					dx : 0,
+					dx : 1,
 					dy : 0
 				}
 
