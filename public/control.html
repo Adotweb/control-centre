@@ -5,6 +5,21 @@
 		const ws = new WebSocket("http://192.168.1.101:3000")
 
 
+		let symbol_map = {
+			"!" : 1,
+			'"' : 2,
+			"§" : 3,
+			"$" : 4,
+			"%" : 5,
+			"&" : 6,
+			"/" : 7,
+			"(" : 8,
+			")" : 9,
+			"=" : 0,
+
+			"*" : "+",
+		}
+
 
 		let locked = false;
 
@@ -14,7 +29,43 @@
 				event.preventDefault()
 
 				let clipboard_content = await navigator.clipboard.readText();
-				console.log(clipboard_content)
+				
+				clipboard_content
+					.split("")
+					.filter(s => s != "")
+					.forEach(character => {
+					
+						let key = character;
+
+
+						let modifier = [];	
+
+						if(key.toLowerCase() != key){
+							modifier = ["shift"];
+						}
+
+						if(symbol_map[key]){
+							key = symbol_map[key]
+						}
+
+
+						if(key == "z"){
+							key = "y"
+						}
+
+						if(key == "y"){
+							key = "z"
+						}
+
+						console.log(key)
+
+						ws.send(JSON.stringify({
+							type : "keyboard",
+							key,
+							modifier : modifier.join("+")
+						}))
+					})
+
 			}
 
 
@@ -42,11 +93,21 @@
 			if(event.shiftKey){
 				modifier.push("shift");
 			}
+			
+			let key = event.key.toLowerCase();
+
+			if(key == "z"){
+				key = "y"
+			}
+
+			if(key == "y"){
+				key = "z"
+			}
 
 
 			ws.send(JSON.stringify({
 				type : "keyboard",
-				key : event.key.toLowerCase(),
+				key,
 				modifier : modifier.join("+")
 			}))
 
