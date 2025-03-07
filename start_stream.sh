@@ -16,12 +16,12 @@ echo "browser open"
 
 echo "wating for browser"
 
-xdotool key "alt+f"
 
 sleep 8
 
 xdotool key "Escape"
 
+xdotool key "alt+f"
 sleep 2
 
 echo "creating discord tab"
