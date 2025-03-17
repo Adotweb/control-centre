@@ -117,20 +117,29 @@
 		let left_click = false;
 		let right_click = false;
 
-	
+
+		let position = {
+			x : 0,
+			y : 0
+		}
 
 		document.addEventListener("mousemove", e => {
 
 			//return
 
+			let percentage_x = e.clientX/window.innerWidth
+			let percentage_y = e.clientY/window.innerHeight
+
+
+			position = {
+				x : percentage_x,
+				y : percentage_y
+			};
 
 			ws.send(JSON.stringify({
 
 				type : "mouse",
-				movement : {
-					dx : e.movementX,
-					dy : e.movementY
-				},
+				position,
 				buttons : {
 					left_click,
 					right_click
@@ -167,10 +176,7 @@
 			ws.send(JSON.stringify({
 
 				type : "mouse",
-				movement : {
-					dx : 0,
-					dy : 0
-				},
+				position,
 				buttons : {
 					left_click : false,
 					right_click : false
@@ -187,11 +193,7 @@
 					right_click : e.which == 3
 				},
 				scroll : e.deltaY,
-				movement : {
-					dx : 0,
-					dy : 0
-				}
-
+				position
 			}))
 		})
 
@@ -203,11 +205,7 @@
 					right_click : e.which == 3
 				},
 				scroll : 0,
-				movement : {
-					dx : 1,
-					dy : 0
-				}
-
+				position
 			}))
 		})
 
