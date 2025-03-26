@@ -49,14 +49,6 @@
 						}
 
 
-						if(key == "z"){
-							key = "y"
-						}
-
-						if(key == "y"){
-							key = "z"
-						}
-
 						console.log(key)
 
 						ws.send(JSON.stringify({
@@ -80,10 +72,11 @@
 
 
 			if(event.ctrlKey){
-
-					
-
 				modifier.push("ctrl");				
+			}
+
+			if(event.getModifierState("AltGraph")){
+				modifier.push("altgr")
 			}
 
 			if(event.altKey){
@@ -94,16 +87,23 @@
 				modifier.push("shift");
 			}
 			
-			let key = event.key.toLowerCase();
+			let key = 
+				//event.code.replace("Key", "").replace("digit", "").toLowerCase(); 
+				event.key.toLowerCase();
 
 			if(key == "z"){
 				key = "y"
-			}
-
-			if(key == "y"){
+			} else if(key == "y"){
 				key = "z"
 			}
 
+			if(key == "dead"){
+				key = "´"
+			}
+
+			console.log(event, {
+				key, modifier 
+			})
 
 			ws.send(JSON.stringify({
 				type : "keyboard",
@@ -228,4 +228,4 @@ img{
 
 </style>
 
-<img src="http://localhost:5000/?action=stream" alt="" width="800" height="600">
+<img draggable="false" src="http://localhost:5000/?action=stream" alt="" width="800" height="600">
